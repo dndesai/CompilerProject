@@ -1,0 +1,337 @@
+There are 49 nonterminals in my grammar. 99 production rules. the first plus sets of more than one production rules of any same non-terminal does not have any elements in common which makes the grammar LL(1). 
+
+<program> --> <type name> ID <programprime>
+FIRST + {int,void,decimal, binary}
+
+<program> --> empty
+FIRST + {EMPTY, eof}
+
+
+<programprime> --> <data decls prime>
+FIRST + {left_bracket, comma}
+
+<programprime> --> <func list prime>
+FIRST + { left_parenthesis}
+
+<programprime> --> empty	
+FIRST + {EMPTY, eof}
+
+
+
+
+
+
+<data decls prime> --> left_bracket <expression> right_bracket <id list prime> semicolon <data decls prime prime> 
+FIRST + {left_bracket}
+
+<data decls prime> --> comma <id> <id list>'  semicolon <data decls prime prime> 
+FIRST + {comma}
+
+
+<data decls prime prime> --> <typename> ID <dataFuncDecl> 
+FIRST + {int,void,decimal, binary}
+
+<data decls prime prime> --> empty
+FIRST + {empty, eof}
+
+
+
+<dataFuncDecl> --> <data decls prime> 
+FIRST + {left_bracket, comma}
+
+<dataFuncDecl> --> <func list prime>
+FIRST + { left_parenthesis}
+
+
+<func list> 	--> <func> <func list>
+FIRST + {int,void,decimal, binary}
+
+<func list> 	--> empty
+FIRST + {empty, eof}			
+
+
+<func list prime> --> <func decl prime>   <func prime> <func list>
+FIRST + { left_parenthesis}
+
+<func> --> <func decl> <func prime>
+FIRST + {int,void,decimal, binary}
+
+<func prime> --> semicolon 
+FIRST + {semicolon}
+
+<func prime> --> left_brace <data decls> <statements> right_brace 
+FIRST + {left_brace}
+
+
+<data decls> --> <type name> <id list> semicolon <data decls>
+FIRST + {int,void,decimal, binary}
+
+<data decls> --> empty
+FIRST + { ID, if while, return, continue, break , read, write, print, right brace , empty }
+	
+
+
+<func decl> --> <type name> ID <func decl prime>
+FIRST + {int,void,decimal, binary}
+
+
+<func decl prime> --> left_parenthesis <parameter list> right_parenthesis 
+FIRST + { left_parenthesis}
+		
+
+<type name> --> int 
+FIRST + {int}
+
+<type name> -->	void 
+FIRST + {void}
+
+<type name> -->	binary 
+FIRST + {binary}
+
+<type name> -->	 decimal 
+FIRST + {decimal}
+
+<parameter list> -->	void <parameter list>'
+FIRST + {void}
+<parameter list> --> int ID <non-empty list>'
+FIRST + {int}
+
+<parameter list> --> binary ID <non-empty list>'
+FIRST + {binary}
+<parameter list> --> decimal ID <non-empty list>' 
+FIRST + {decimal}
+
+<parameter list> --> empty 
+FIRST + {empty, right_parenthesis }
+
+
+<parameter list>' --> ID <non-empty list>'
+FIRST + {ID}
+
+<parameter list>' -->			empty
+FIRST + {empty, right_parenthesis }
+
+
+
+<non-empty list> --> <type name> ID <non-empty list>'
+FIRST + {int,void,decimal, binary}
+
+<non-empty list>' -->	comma <type name> ID <non-empty list>'
+FIRST + {comma}
+
+<non-empty list>' -->			empty
+FIRST + {empty, right_parenthesis }
+
+
+
+<id list> --> <id>	<id list>'
+FIRST + {ID}
+
+<id list>'	-->	  comma <id> <id list>'
+FIRST + {comma}
+<id list>'	-->  empty
+FIRST + {empty, semicolon}
+
+
+
+<id> --> ID <id>'	
+FIRST + {ID}
+
+<id>'-->    left_bracket <expression> right_bracket
+FIRST + {left_bracket}
+
+<id>'--> empty
+FIRST + {empty, comma,semicolon, equal sign}
+
+
+
+<block statements> --> left_brace <statements> right_brace 
+FIRST + {left_brace}
+
+<statements> --> <statement> <statements> 
+FIRST + { ID, if, while, return, break, continue, read, write, print }
+
+<statements> --> empty 
+FIRST + {empty, rightbrace}
+
+
+
+<statement> --> ID <statement>' 
+FIRST + {ID}
+
+<statement> --> <if statement> 
+FIRST + {if}
+
+<statement> --> <while statement> 
+FIRST + {while}
+
+<statement> --> <return statement> 
+FIRST + {return}
+
+<statement> -->  <break statement> 
+FIRST + {break}
+
+<statement> -->  <continue statement> 
+FIRST + { continue}
+
+<statement> -->  read left_parenthesis  ID right_parenthesis semicolon 
+FIRST + { read}
+
+<statement> -->  write left_parenthesis <expression> right_parenthesis semicolon 
+FIRST + { write}
+
+<statement> -->  print left_parenthesis  STRING right_parenthesis semicolon 
+FIRST + {print}
+
+
+
+<statement>' -->	<assignment>
+FIRST + {left_bracket, equal_sign}
+
+<statement>' -->	<func call>
+FIRST + {  lefft_parenthesis}
+
+
+<assignment> --> left_bracket <expression> right_bracket equal_sign <expression> semicolon
+FIRST + {left_bracket}
+
+<assignment> -->  equal_sign <expression> semicolon
+FIRST + { equal_sign}
+
+<func call> --> left_parenthesis <expr list> right_parenthesis semicolon 
+FIRST + {  lefft_parenthesis}
+
+
+<expr list> -->	 <non-empty expr list> 
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<expr list> --> empty 
+FIRST + {empty, right_parenthesis }
+
+
+
+
+<non-empty expr list> --> <expression> <non-empty expr list>'
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<non-empty expr list>'	-->	comma <expression> <non-empty expr list> '
+FIRST + {comma}
+
+<non-empty expr list>'	--> empty
+FIRST + {empty,right parenthesis}
+
+
+
+<if statement> --> if left_parenthesis <condition expression> right_parenthesis <block statements> 
+FIRST + {if}
+
+<condition expression> -->  <condition> <condition expression>'
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<condition expression>'	-->  <condition op> <condition> 
+FIRST + { double_and_sign , double_or_sign }
+
+<condition expression>'	--> empty
+FIRST + {empty, right parenthesis}
+
+<condition op> --> double_and_sign
+FIRST + { double_and_sign }
+
+<condition op> --> double_or_sign 
+FIRST + { double_or_sign }
+
+<condition> --> <expression> <comparison op> <expression> 
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<comparison op> --> == 
+FIRST + { == }	
+
+<comparison op> -->	!= 
+FIRST + { != }
+
+<comparison op> -->	 > 	
+FIRST + { > }
+<comparison op> -->	>= 
+FIRST + { >= }
+<comparison op> --> < 
+FIRST + { < }
+<comparison op> --> <=
+FIRST + { <= }
+
+<while statement> --> while left_parenthesis <condition expression> right_parenthesis <block statements> 
+FIRST + { while}
+
+<return statement> --> return <return statement> '
+FIRST + { return }
+
+
+<return statement> '--> <expression> semicolon 
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<return statement> '-->		semicolon 
+FIRST + { semicolon}
+
+<break statement> ---> break semicolon 
+FIRST + { break}
+
+<continue statement> ---> continue semicolon
+FIRST + { continue }
+
+<expression> --> <term> <expression>'
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+
+<expression>' -->	 <addop> <term> <expression>'
+FIRST + { plus sign, minus sign}
+
+<expression>' --> empty
+
+FIRST + {right_bracket, comma, right_parenthesis, , semicolon,  == ,!= , > , >= ,< , <=, double_and_sign 
+	 double_or_sign , empty}
+
+
+
+
+<addop> --> plus_sign 
+FIRST + { plus sign }
+
+<addop> --> minus_sign 
+FIRST + { minus_sign }
+
+<term> --> <factor> <term>'
+FIRST + { ID, NUMBER, left_parenthesis,  minus_sign}
+
+<term>'	-->  <mulop> <factor> <term>'
+FIRST + { star_sign , forward_slash} 
+
+<term>'	--> empty 
+FIRST + {plus_sign , minus_sign,comma,  right_bracket, right_parenthesis,  semicolon,  == ,!= , > , >= ,< , <=, double_and_sign ,double_or_sign }
+
+
+
+<mulop> --> star_sign
+FIRST + { star_sign }
+
+<mulop> -->	forward_slash 
+FIRST + { forward_slash} 
+
+<factor> --> ID <factor>'
+FIRST + { ID}
+
+<factor> --> NUMBER 
+FIRST + { NUMBER }
+
+<factor> --> minus_sign NUMBER 
+FIRST + { minus_sign }
+
+<factor> --> left_parenthesis <expression> right_parenthesis
+FIRST + { left_parenthesis }
+
+<factor>'-->left_bracket <expression> right_bracket 
+FIRST + {left_bracket}
+
+<factor>'--> left_parenthesis <expr list> right_parenthesis 
+FIRST + { left_parenthesis }
+
+<factor>'--> empty
+FIRST +		{star_sign, forward_slash,comma , plus_sign , minus_sign, right_bracket, right_parenthesis,  semicolon,  == ,!= , > , >= ,< , <=, double_and_sign ,double_or_sign}
